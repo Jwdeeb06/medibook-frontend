@@ -1,0 +1,205 @@
+/* ========================================================
+   MediBook Theme — Crimson Red (#AB1509) + Cream (#fff7d3)
+   ======================================================== */
+
+:root {
+  --brand-red: #AB1509;
+  --brand-red-dark: #8a1107;
+  --brand-red-light: #c93428;
+  --brand-cream: #fff7d3;
+  --brand-cream-dark: #f5ecc0;
+  --text-dark: #2a1a18;
+  --text-muted: #6b5a58;
+  --shadow-soft: 0 2px 8px rgba(171, 21, 9, 0.08);
+  --shadow-card: 0 4px 16px rgba(171, 21, 9, 0.12);
+}
+
+/* ===== Bootstrap overrides ===== */
+.btn-primary,
+.bg-primary {
+  background-color: var(--brand-red) !important;
+  border-color: var(--brand-red) !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--brand-red-dark) !important;
+  border-color: var(--brand-red-dark) !important;
+}
+
+.text-primary {
+  color: var(--brand-red) !important;
+}
+
+.btn-outline-primary {
+  color: var(--brand-red);
+  border-color: var(--brand-red);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--brand-red);
+  border-color: var(--brand-red);
+}
+
+/* ===== Body ===== */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background-color: var(--brand-cream);
+  color: var(--text-dark);
+}
+
+/* ===== Navbar ===== */
+.navbar-brand {
+  color: var(--brand-red) !important;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.navbar-medical {
+  background-color: white !important;
+  border-bottom: 3px solid var(--brand-red);
+  box-shadow: var(--shadow-soft);
+}
+
+.navbar-medical .nav-link {
+  color: var(--text-dark) !important;
+  font-weight: 500;
+  padding: 0.5rem 1rem !important;
+  transition: color 0.2s;
+}
+
+.navbar-medical .nav-link:hover,
+.navbar-medical .nav-link.active {
+  color: var(--brand-red) !important;
+}
+
+.navbar-medical .nav-link.active {
+  border-bottom: 2px solid var(--brand-red);
+}
+
+/* ===== Hero ===== */
+.hero-medical {
+  background: linear-gradient(135deg, var(--brand-red) 0%, var(--brand-red-dark) 100%);
+  color: var(--brand-cream);
+  padding: 5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-medical h1 {
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.hero-btn {
+  background-color: var(--brand-cream);
+  color: var(--brand-red);
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border: none;
+  transition: all 0.2s;
+}
+
+.hero-btn:hover {
+  background-color: white;
+  color: var(--brand-red-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== Cards ===== */
+.card {
+  border: none;
+  border-radius: 12px;
+  background-color: white;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card) !important;
+}
+
+.card-medical {
+  border-top: 4px solid var(--brand-red);
+}
+
+/* ===== Doctor card ===== */
+.doctor-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand-red) 0%, var(--brand-red-light) 100%);
+  color: var(--brand-cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 auto 1rem;
+  border: 4px solid var(--brand-cream);
+  box-shadow: var(--shadow-soft);
+}
+
+.doctor-specialization {
+  display: inline-block;
+  background-color: var(--brand-cream);
+  color: var(--brand-red-dark);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* ===== Service price tag ===== */
+.price-tag {
+  color: var(--brand-red);
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+/* ===== Footer ===== */
+.footer-medical {
+  background-color: var(--brand-red-dark);
+  color: var(--brand-cream);
+  padding: 3rem 0 1.5rem;
+  margin-top: 4rem;
+}
+
+.footer-medical a {
+  color: var(--brand-cream);
+  text-decoration: none;
+}
+
+.footer-medical a:hover {
+  text-decoration: underline;
+}
+
+/* ===== Section title ===== */
+.section-title {
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background-color: var(--brand-red);
+  margin: 0.75rem auto 0;
+  border-radius: 2px;
+}
+
+/* ===== Form focus ring in brand color ===== */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--brand-red-light);
+  box-shadow: 0 0 0 0.2rem rgba(171, 21, 9, 0.15);
+}
+
+/* ===== Spinner ===== */
+.spinner-border.text-primary {
+  color: var(--brand-red) !important;
+}
