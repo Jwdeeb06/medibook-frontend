@@ -10,7 +10,6 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
 
 useEffect(() => {
-  // Doctors see their own stats, admins see full stats
   if (user?.role === 'doctor') {
     api.get('/bookings/doctor')
       .then(res => setStats({
