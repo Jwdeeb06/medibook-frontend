@@ -388,3 +388,141 @@
     grid-template-columns: 80px 1fr 1fr 50px;
   }
 }
+
+/* ========================================================
+   Admin Panel — Mobile Responsive
+   ======================================================== */
+
+@media (max-width: 991px) {
+
+  /* Sidebar becomes a top bar on mobile */
+  .admin-layout {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: 100% !important;
+    height: auto;
+    min-height: unset;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+  }
+
+  .sidebar-header {
+    padding: 0.75rem 1rem;
+    border-bottom: none;
+    border-right: 1px solid rgba(255,247,211,0.15);
+    min-height: unset;
+    flex-shrink: 0;
+  }
+
+  .sidebar-role { display: none; }
+
+  /* Nav becomes horizontal scrollable */
+  .sidebar-nav {
+    flex-direction: row;
+    padding: 0.5rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 0.25rem;
+    scrollbar-width: none;
+    flex: 1;
+  }
+
+  .sidebar-nav::-webkit-scrollbar { display: none; }
+
+  .sidebar-link {
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.72rem;
+    white-space: nowrap;
+    border-radius: 8px;
+  }
+
+  .sidebar-link.active {
+    box-shadow: none;
+    background: rgba(255,247,211,0.2);
+  }
+
+  .sidebar-icon { font-size: 1rem; width: auto; }
+  .sidebar-label { font-size: 0.68rem; }
+
+  /* Footer moves to end of nav, hidden on mobile */
+  .sidebar-footer { display: none; }
+
+  /* Collapse button hidden on mobile */
+  .collapse-btn { display: none; }
+
+  /* Content takes full width */
+  .admin-content {
+    padding: 1rem;
+    min-height: unset;
+  }
+
+  /* Stat cards — 2 per row */
+  .stat-card { padding: 1rem; }
+  .stat-card-value { font-size: 1.6rem; }
+
+  /* Tables — horizontal scroll */
+  .table-responsive { overflow-x: auto; }
+
+  /* Admin card padding */
+  .admin-card { padding: 1rem !important; }
+
+  /* Schedule grid */
+  .schedule-row {
+    grid-template-columns: 90px 1fr 1fr 50px;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  /* Modal full screen on mobile */
+  .admin-modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .admin-modal {
+    border-radius: 20px 20px 0 0;
+    max-height: 90vh;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+
+  /* Page title smaller */
+  .admin-page-title { font-size: 1.4rem; }
+
+  /* Stat cards — 2 per row forced */
+  .col-6 { flex: 0 0 50%; max-width: 50%; }
+
+  /* Hide some table columns on very small screens */
+  .table th:nth-child(3),
+  .table td:nth-child(3) { display: none; }
+
+  /* Admin page header stacks */
+  .admin-page-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  /* Buttons full width in header */
+  .admin-page-header .btn,
+  .admin-page-header .btn-admin-primary {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Schedule grid stacks on very small */
+  .schedule-row {
+    grid-template-columns: 80px 1fr 1fr 40px;
+    font-size: 0.8rem;
+  }
+}

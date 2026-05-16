@@ -14,6 +14,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import MyBookings from './pages/MyBookings';
 import NotFound from './pages/NotFound';
+import BookingReceipt from './pages/BookingReceipt';
 
 // Admin panel
 import AdminLayout from './components/admin/AdminLayout';
@@ -23,6 +24,7 @@ import AdminDoctors from './pages/admin/AdminDoctors';
 import AdminServices from './pages/admin/AdminServices';
 import AdminPatients from './pages/admin/AdminPatients';
 import AdminSettings from './pages/admin/AdminSettings';
+import AdminAnalytics from './pages/admin/AdminAnalytics';
 
 // Doctor panel
 import DoctorAppointments from './pages/admin/DoctorAppointments';
@@ -67,6 +69,7 @@ function App() {
         <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
         <Route path="/my-bookings" element={<PrivateRoute><MyBookings /></PrivateRoute>} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/booking/receipt/:id" element={<PrivateRoute><BookingReceipt /></PrivateRoute>} />
       </Route>
 
       {/* Admin/Doctor panel — no public Navbar, own sidebar */}
@@ -77,6 +80,7 @@ function App() {
         <Route path="services" element={<AdminServices />} />
         <Route path="patients" element={<AdminPatients />} />
         <Route path="settings" element={<AdminSettings />} />
+        <Route path="analytics" element={<AdminAnalytics />} />
         {/* Doctor routes */}
         <Route path="my-appointments" element={<DoctorAppointments />} />
         <Route path="my-profile" element={<DoctorProfile />} />

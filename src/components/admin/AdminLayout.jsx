@@ -3,20 +3,21 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const adminNav = [
-  { to: '/admin', label: 'Dashboard', icon: '📊', exact: true },
-  { to: '/admin/bookings', label: 'Bookings', icon: '📅' },
-  { to: '/admin/patients', label: 'Patients', icon: '👥' },
-  { to: '/admin/doctors', label: 'Doctors', icon: '🩺' },
-  { to: '/admin/services', label: 'Services', icon: '🔬' },
-  { to: '/admin/settings', label: 'Settings', icon: '⚙️' },
+  { to: '/admin', label: 'Dashboard', icon: 'fa-gauge', exact: true },
+  { to: '/admin/bookings', label: 'Bookings', icon: 'fa-calendar-check' },
+  { to: '/admin/patients', label: 'Patients', icon: 'fa-users' },
+  { to: '/admin/doctors', label: 'Doctors', icon: 'fa-user-doctor' },
+  { to: '/admin/services', label: 'Services', icon: 'fa-stethoscope' },
+  { to: '/admin/settings', label: 'Settings', icon: 'fa-gear' },
+  { to: '/admin/analytics', label: 'Analytics', icon: 'fa-chart-line' },
 ];
 
 const doctorNav = [
-  { to: '/admin', label: 'Dashboard', icon: '📊', exact: true },
-  { to: '/admin/my-appointments', label: 'My Appointments', icon: '📅' },
-  { to: '/admin/my-profile', label: 'My Profile', icon: '👤' },
-  { to: '/admin/my-schedule', label: 'My Schedule', icon: '🗓️' },
-  { to: '/admin/my-services', label: 'My Services', icon: '🔬' },
+  { to: '/admin', label: 'Dashboard', icon: 'fa-gauge', exact: true },
+  { to: '/admin/my-appointments', label: 'My Appointments', icon: 'fa-calendar-check' },
+  { to: '/admin/my-profile', label: 'My Profile', icon: 'fa-user' },
+  { to: '/admin/my-schedule', label: 'My Schedule', icon: 'fa-calendar-days' },
+  { to: '/admin/my-services', label: 'My Services', icon: 'fa-stethoscope' },
 ];
 
 function AdminLayout() {
@@ -25,34 +26,33 @@ function AdminLayout() {
   const [collapsed, setCollapsed] = useState(false);
 
   const navItems = user?.role === 'admin' ? adminNav : doctorNav;
-
   const handleLogout = () => { logout(); navigate('/'); };
 
   return (
     <div className="admin-layout">
-      {/* Sidebar */}
       <aside className={`admin-sidebar ${collapsed ? 'collapsed' : ''}`}>
         <div className="sidebar-header">
           {!collapsed && (
             <div>
-              <div className="sidebar-logo">⚕ MediBook</div>
-              <div className="sidebar-role">{user?.role === 'admin' ? 'Administrator' : 'Doctor Panel'}</div>
+              <div className="sidebar-logo">
+                <i className="fa-solid fa-hospital-user me-2"></i>MediBook
+              </div>
+              <div className="sidebar-role">
+                {user?.role === 'admin' ? 'Administrator' : 'Doctor Panel'}
+              </div>
             </div>
           )}
           <button className="collapse-btn" onClick={() => setCollapsed(!collapsed)}>
-            {collapsed ? '→' : '←'}
+            <i className={`fa-solid fa-chevron-${collapsed ? 'right' : 'left'}`}></i>
           </button>
         </div>
 
         <nav className="sidebar-nav">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.exact}
+          {navItems.map(item => (
+            <NavLink key={item.to} to={item.to} end={item.exact}
               className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
-            >
-              <span className="sidebar-icon">{item.icon}</span>
+              title={collapsed ? item.label : ''}>
+              <i className={`fa-solid ${item.icon} sidebar-icon`}></i>
               {!collapsed && <span className="sidebar-label">{item.label}</span>}
             </NavLink>
           ))}
@@ -60,9 +60,7 @@ function AdminLayout() {
 
         <div className="sidebar-footer">
           <div className={`sidebar-user ${collapsed ? 'justify-content-center' : ''}`}>
-            <div className="sidebar-avatar">
-              {user?.name?.charAt(0).toUpperCase()}
-            </div>
+            <div className="sidebar-avatar">{user?.name?.charAt(0).toUpperCase()}</div>
             {!collapsed && (
               <div className="sidebar-user-info">
                 <div className="sidebar-user-name">{user?.name}</div>
@@ -71,12 +69,12 @@ function AdminLayout() {
             )}
           </div>
           <button className="sidebar-logout" onClick={handleLogout} title="Logout">
-            🚪 {!collapsed && 'Logout'}
+            <i className="fa-solid fa-right-from-bracket me-2"></i>
+            {!collapsed && 'Logout'}
           </button>
         </div>
       </aside>
 
-      {/* Main content */}
       <div className="admin-content">
         <Outlet />
       </div>

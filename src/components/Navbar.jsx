@@ -1,6 +1,7 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useSettings } from '../context/SettingsContext';
 import { useAuth } from '../context/AuthContext';
+import NotificationBell from './NotificationBell';
 
 function Navbar() {
   const { settings } = useSettings();
@@ -8,21 +9,17 @@ function Navbar() {
   const navigate = useNavigate();
 
   const linkClass = ({ isActive }) => 'nav-link' + (isActive ? ' active' : '');
-
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
+  const handleLogout = () => { logout(); navigate('/'); };
 
   return (
     <nav className="navbar navbar-expand-lg navbar-medical sticky-top">
       <div className="container">
-        <Link className="navbar-brand fs-4" to="/">
-          <span style={{ fontSize: '1.4rem' }}>⚕</span> {settings.site_name}
+        <Link className="navbar-brand fs-5 fw-bold" to="/">
+          <i className="fa-solid fa-hospital-user me-2" style={{ color: 'var(--brand-red)' }}></i>
+          {settings.site_name}
         </Link>
 
-        <button className="navbar-toggler" type="button"
-          data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
           <span className="navbar-toggler-icon"></span>
         </button>
 
@@ -36,27 +33,40 @@ function Navbar() {
 
             {isAuthenticated ? (
               <>
-                {user?.role === 'admin' && (
+                {['admin', 'doctor'].includes(user?.role) && (
                   <li className="nav-item">
-                    <NavLink to="/admin" className={linkClass}>Admin</NavLink>
+                    <NavLink to="/admin" className={linkClass}>
+                      <i className="fa-solid fa-gauge me-1"></i>Dashboard
+                    </NavLink>
                   </li>
                 )}
-                <li className="nav-item">
-                  <NavLink to="/my-bookings" className={linkClass}>My Bookings</NavLink>
+                {user?.role === 'patient' && (
+                  <li className="nav-item">
+                    <NavLink to="/my-bookings" className={linkClass}>
+                      <i className="fa-solid fa-calendar-check me-1"></i>My Bookings
+                    </NavLink>
+                  </li>
+                )}
+                <li className="nav-item ms-lg-1">
+                  <NotificationBell />
                 </li>
                 <li className="nav-item ms-lg-2 mt-2 mt-lg-0">
                   <button onClick={handleLogout} className="btn btn-outline-danger btn-sm px-3">
-                    Logout
+                    <i className="fa-solid fa-right-from-bracket me-1"></i>Logout
                   </button>
                 </li>
               </>
             ) : (
               <>
                 <li className="nav-item ms-lg-2 mt-2 mt-lg-0">
-                  <Link to="/login" className="btn btn-outline-primary btn-sm px-3 me-2">Login</Link>
+                  <Link to="/login" className="btn btn-outline-primary btn-sm px-3 me-2">
+                    <i className="fa-solid fa-right-to-bracket me-1"></i>Login
+                  </Link>
                 </li>
                 <li className="nav-item mt-1 mt-lg-0">
-                  <Link to="/booking" className="btn btn-primary btn-sm px-3">Book Now</Link>
+                  <Link to="/booking" className="btn btn-primary btn-sm px-3">
+                    <i className="fa-solid fa-calendar-plus me-1"></i>Book Now
+                  </Link>
                 </li>
               </>
             )}
