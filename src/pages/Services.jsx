@@ -111,7 +111,7 @@ function Services() {
                         <span style={{ fontSize: '1.5rem', fontWeight: 800, color: '#AB1509' }}>${service.price}</span>
                         <small className="text-muted ms-1">/ session</small>
                       </div>
-                      <Link to="/booking" className="btn btn-sm px-3 py-2 fw-semibold" style={{ background: '#AB1509', color: '#fff7d3', borderRadius: 10, fontSize: '0.85rem' }}>
+                      <Link to={`/booking?service_id=${service.id}`} className="btn btn-sm px-3 py-2 fw-semibold" style={{ background: '#AB1509', color: '#fff7d3', borderRadius: 10, fontSize: '0.85rem' }}>
                         <i className="fa-solid fa-calendar-plus me-1"></i>Book Now
                       </Link>
                     </div>

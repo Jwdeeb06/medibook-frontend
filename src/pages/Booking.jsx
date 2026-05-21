@@ -63,6 +63,15 @@ function Booking() {
       .finally(() => setLoading(false));
   }, [form.service_id, form.doctor_id, form.booking_date]);
 
+  // Read service_id from URL params and pre-select
+useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const serviceId = params.get('service_id');
+  const doctorId = params.get('doctor_id');
+  if (serviceId) setForm(f => ({ ...f, service_id: serviceId }));
+  if (doctorId) setForm(f => ({ ...f, doctor_id: doctorId }));
+  if (serviceId) setStep(2); // skip to doctor step
+}, []);
   const selectedService = services.find(s => s.id === parseInt(form.service_id));
   const selectedDoctor = doctors.find(d => d.id === parseInt(form.doctor_id));
 
@@ -213,7 +222,13 @@ function Booking() {
                           border: form.doctor_id === String(d.id) ? '2px solid #AB1509' : '2px solid #e5e7eb',
                           background: form.doctor_id === String(d.id) ? '#fff7d3' : 'white' }}>
                         <div className="d-flex align-items-center gap-3">
-                          <img src={d.photo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(d.name)}&background=AB1509&color=fff7d3&size=48`}
+                          <img src={
+  d.photo_url
+    ? d.photo_url.startsWith('/uploads')
+      ? `http://localhost:5000${d.photo_url}`
+      : d.photo_url
+    : `https://ui-avatars.com/api/?name=${encodeURIComponent(d.name)}&background=AB1509&color=fff7d3&size=48`
+}
                             alt={d.name} style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' }} />
                           <div>
                             <div className="fw-bold">{d.name}</div>

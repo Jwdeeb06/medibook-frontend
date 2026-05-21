@@ -29,11 +29,22 @@ export default function MyBookings() {
     catch (err) { alert(err.response?.data?.error || 'Could not cancel'); }
   };
 
+  const handleApproveReassign = async (id) => {
+    try { await api.post(`/bookings/${id}/approve-reassign`); fetchBookings(); }
+    catch (err) { alert(err.response?.data?.error || 'Failed'); }
+  };
+
+  const handleDeclineReassign = async (id) => {
+    if (!window.confirm('Decline this reschedule? Your original appointment time will be kept.')) return;
+    try { await api.post(`/bookings/${id}/decline-reassign`); fetchBookings(); }
+    catch (err) { alert(err.response?.data?.error || 'Failed'); }
+  };
+
   const filtered = filter === 'all' ? bookings : bookings.filter(b => b.status === filter);
+  const pendingReassign = bookings.filter(b => b.reassign_status === 'pending_approval').length;
 
   return (
     <>
-      {/* Hero */}
       <div style={{ background: 'linear-gradient(135deg, #AB1509 0%, #7a0e06 100%)', padding: '3rem 0' }}>
         <div className="container">
           <h1 className="fw-bold mb-1" style={{ color: '#fff7d3' }}>My Appointments</h1>
@@ -42,7 +53,18 @@ export default function MyBookings() {
       </div>
 
       <div className="container py-5">
-        {/* Filter */}
+        {/* Reassign alert banner */}
+        {pendingReassign > 0 && (
+          <div className="alert mb-4 d-flex align-items-center gap-3"
+            style={{ background: '#fff7d3', border: '2px solid #f59e0b', borderRadius: 12 }}>
+            <i className="fa-solid fa-triangle-exclamation fa-lg" style={{ color: '#d97706' }}></i>
+            <div>
+              <strong>Action Required:</strong> You have {pendingReassign} appointment{pendingReassign > 1 ? 's' : ''} with a pending reschedule request. Please review and respond below.
+            </div>
+          </div>
+        )}
+
+        {/* Filter tabs */}
         <div className="d-flex gap-2 mb-4 flex-wrap">
           {['all', 'pending', 'confirmed', 'completed', 'cancelled'].map(s => (
             <button key={s} onClick={() => setFilter(s)}
@@ -54,7 +76,10 @@ export default function MyBookings() {
                 border: `1px solid ${filter === s ? '#AB1509' : '#e5e7eb'}`,
               }}>
               {s.charAt(0).toUpperCase() + s.slice(1)}
-              <span className="ms-1 badge rounded-pill" style={{ background: filter === s ? 'rgba(255,247,211,0.3)' : '#f3f4f6', color: filter === s ? '#fff7d3' : '#6b7280', fontSize: '0.7rem' }}>
+              <span className="ms-1 badge rounded-pill" style={{
+                background: filter === s ? 'rgba(255,247,211,0.3)' : '#f3f4f6',
+                color: filter === s ? '#fff7d3' : '#6b7280', fontSize: '0.7rem'
+              }}>
                 {s === 'all' ? bookings.length : bookings.filter(b => b.status === s).length}
               </span>
             </button>
@@ -80,32 +105,81 @@ export default function MyBookings() {
           {filtered.map(b => (
             <div className="col-md-6 col-lg-4" key={b.id}>
               <div className="card border-0 shadow-sm h-100" style={{ borderRadius: 16, overflow: 'hidden' }}>
-                {/* Status bar */}
-                <div style={{ height: 5, background: b.status === 'confirmed' ? '#059669' : b.status === 'cancelled' ? '#ef4444' : b.status === 'completed' ? '#6366f1' : '#f59e0b' }} />
+                {/* Status color bar */}
+                <div style={{
+                  height: 5,
+                  background:
+                    b.reassign_status === 'pending_approval' ? '#f59e0b' :
+                    b.status === 'confirmed' ? '#059669' :
+                    b.status === 'cancelled' ? '#ef4444' :
+                    b.status === 'completed' ? '#6366f1' : '#f59e0b'
+                }} />
 
                 <div className="card-body p-4 d-flex flex-column">
+                  {/* Header */}
                   <div className="d-flex justify-content-between align-items-start mb-3">
                     <h6 className="fw-bold mb-0">{b.service_name}</h6>
                     <span className={`status-badge ${statusColor[b.status]}`}>{b.status}</span>
                   </div>
 
+                  {/* Reassignment pending banner */}
+                  {b.reassign_status === 'pending_approval' && (
+                    <div className="mb-3 p-3 rounded-3" style={{ background: '#fff7d3', border: '2px solid #f59e0b' }}>
+                      <div className="fw-semibold mb-1" style={{ color: '#92400e', fontSize: '0.88rem' }}>
+                        <i className="fa-solid fa-triangle-exclamation me-2"></i>
+                        Reschedule Requested
+                      </div>
+                      <div className="text-muted small mb-3">
+                        New time proposed:{' '}
+                        <strong>
+                          {b.pending_date && new Date(b.pending_date).toLocaleDateString('en-GB', {
+                            weekday: 'short', day: 'numeric', month: 'short'
+                          })}
+                        </strong>
+                        {' '}at <strong>{b.pending_time?.slice(0, 5)}</strong>
+                      </div>
+                      <div className="d-flex gap-2">
+                        <button className="btn btn-sm btn-success flex-fill fw-semibold"
+                          onClick={() => handleApproveReassign(b.id)}>
+                          <i className="fa-solid fa-check me-1"></i>Accept
+                        </button>
+                        <button className="btn btn-sm btn-danger flex-fill fw-semibold"
+                          onClick={() => handleDeclineReassign(b.id)}>
+                          <i className="fa-solid fa-xmark me-1"></i>Decline
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Declined badge */}
+                  {b.reassign_status === 'declined' && (
+                    <div className="mb-3 p-2 rounded-3 text-center" style={{ background: '#fef2f2', border: '1px solid #fecaca' }}>
+                      <small style={{ color: '#991b1b', fontWeight: 600 }}>
+                        <i className="fa-solid fa-xmark me-1"></i>You declined the reschedule — original time kept
+                      </small>
+                    </div>
+                  )}
+
+                  {/* Appointment details */}
                   <div className="mb-3">
                     {b.doctor_name && (
                       <div className="d-flex align-items-center gap-2 mb-2">
                         <i className="fa-solid fa-user-doctor" style={{ color: '#AB1509', width: 16 }}></i>
-                        <small>{b.doctor_name}</small>
+                        <small className="fw-semibold">{b.doctor_name}</small>
                         {b.specialization && <small className="text-muted">· {b.specialization}</small>}
                       </div>
                     )}
                     <div className="d-flex align-items-center gap-2 mb-2">
                       <i className="fa-regular fa-calendar" style={{ color: '#AB1509', width: 16 }}></i>
                       <small className="fw-semibold">
-                        {new Date(b.booking_date).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}
+                        {new Date(b.booking_date).toLocaleDateString('en-GB', {
+                          weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
+                        })}
                       </small>
                     </div>
                     <div className="d-flex align-items-center gap-2">
                       <i className="fa-regular fa-clock" style={{ color: '#AB1509', width: 16 }}></i>
-                      <small>{b.start_time?.slice(0,5)} – {b.end_time?.slice(0,5)}</small>
+                      <small>{b.start_time?.slice(0, 5)} – {b.end_time?.slice(0, 5)}</small>
                     </div>
                   </div>
 
@@ -124,14 +198,18 @@ export default function MyBookings() {
                     </div>
                   )}
 
-                  <div className="d-flex justify-content-between align-items-center mt-auto pt-3" style={{ borderTop: '1px solid #f3f4f6' }}>
+                  {/* Footer */}
+                  <div className="d-flex justify-content-between align-items-center mt-auto pt-3"
+                    style={{ borderTop: '1px solid #f3f4f6' }}>
                     <span className="fw-bold" style={{ color: '#AB1509', fontSize: '1.1rem' }}>${b.price}</span>
                     <div className="d-flex gap-2">
-                      <Link to={`/booking/receipt/${b.id}`} className="btn btn-sm btn-outline-secondary" title="Print receipt">
+                      <Link to={`/booking/receipt/${b.id}`}
+                        className="btn btn-sm btn-outline-secondary" title="Print receipt" style={{ borderRadius: 8 }}>
                         <i className="fa-solid fa-print"></i>
                       </Link>
-                      {b.status === 'pending' && (
-                        <button className="btn btn-sm btn-outline-danger" onClick={() => handleCancel(b.id)}>
+                      {b.status === 'pending' && b.reassign_status !== 'pending_approval' && (
+                        <button className="btn btn-sm btn-outline-danger" style={{ borderRadius: 8 }}
+                          onClick={() => handleCancel(b.id)}>
                           Cancel
                         </button>
                       )}

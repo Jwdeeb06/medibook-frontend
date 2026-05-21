@@ -15,7 +15,7 @@ import Register from './pages/Register';
 import MyBookings from './pages/MyBookings';
 import NotFound from './pages/NotFound';
 import BookingReceipt from './pages/BookingReceipt';
-
+import Profile from './pages/Profile';
 // Admin panel
 import AdminLayout from './components/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -25,7 +25,8 @@ import AdminServices from './pages/admin/AdminServices';
 import AdminPatients from './pages/admin/AdminPatients';
 import AdminSettings from './pages/admin/AdminSettings';
 import AdminAnalytics from './pages/admin/AdminAnalytics';
-
+import AdminMessages from './pages/admin/AdminMessages';
+import SendNotification from './pages/admin/SendNotification';
 // Doctor panel
 import DoctorAppointments from './pages/admin/DoctorAppointments';
 import DoctorProfile from './pages/admin/DoctorProfile';
@@ -70,6 +71,7 @@ function App() {
         <Route path="/my-bookings" element={<PrivateRoute><MyBookings /></PrivateRoute>} />
         <Route path="*" element={<NotFound />} />
         <Route path="/booking/receipt/:id" element={<PrivateRoute><BookingReceipt /></PrivateRoute>} />
+        <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
       </Route>
 
       {/* Admin/Doctor panel — no public Navbar, own sidebar */}
@@ -81,6 +83,8 @@ function App() {
         <Route path="patients" element={<AdminPatients />} />
         <Route path="settings" element={<AdminSettings />} />
         <Route path="analytics" element={<AdminAnalytics />} />
+        <Route path="messages" element={<AdminMessages />} />
+        <Route path="send-notification" element={<SendNotification />} />
         {/* Doctor routes */}
         <Route path="my-appointments" element={<DoctorAppointments />} />
         <Route path="my-profile" element={<DoctorProfile />} />

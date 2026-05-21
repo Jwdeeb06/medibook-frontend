@@ -46,7 +46,13 @@ function Doctors() {
                 {/* Doctor photo */}
                 <div style={{ height: 220, overflow: 'hidden', position: 'relative' }}>
                   <img
-                    src={doctor.photo_url || DOCTOR_PHOTOS[index % DOCTOR_PHOTOS.length]}
+                    src={
+  doctor.photo_url
+    ? doctor.photo_url.startsWith('/uploads')
+      ? `http://localhost:5000${doctor.photo_url}`
+      : doctor.photo_url
+    : DOCTOR_PHOTOS[index % DOCTOR_PHOTOS.length]
+}
                     alt={doctor.name}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     onError={e => { e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(doctor.name)}&background=AB1509&color=fff7d3&size=200`; }}

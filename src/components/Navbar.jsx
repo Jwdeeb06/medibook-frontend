@@ -50,10 +50,42 @@ function Navbar() {
                 <li className="nav-item ms-lg-1">
                   <NotificationBell />
                 </li>
-                <li className="nav-item ms-lg-2 mt-2 mt-lg-0">
-                  <button onClick={handleLogout} className="btn btn-outline-danger btn-sm px-3">
-                    <i className="fa-solid fa-right-from-bracket me-1"></i>Logout
+
+                {/* User dropdown */}
+                <li className="nav-item dropdown ms-lg-1">
+                  <button className="btn btn-sm d-flex align-items-center gap-2 px-2 py-1"
+                    style={{ background: 'var(--brand-cream)', border: '1px solid var(--brand-cream-dark)', borderRadius: 20 }}
+                    data-bs-toggle="dropdown">
+                    <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--brand-red)', color: '#fff7d3', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700 }}>
+                      {user?.name?.charAt(0).toUpperCase()}
+                    </div>
+                    <span className="fw-semibold d-none d-lg-block" style={{ fontSize: '0.85rem', color: 'var(--brand-red)', maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {user?.name?.split(' ')[0]}
+                    </span>
+                    <i className="fa-solid fa-chevron-down" style={{ fontSize: '0.65rem', color: 'var(--brand-red)' }}></i>
                   </button>
+                  <ul className="dropdown-menu dropdown-menu-end shadow border-0" style={{ borderRadius: 12, padding: '0.5rem' }}>
+                    {user?.role === 'patient' && (
+                      <li>
+                        <Link to="/profile" className="dropdown-item rounded-2">
+                          <i className="fa-solid fa-user me-2 text-muted"></i>My Profile
+                        </Link>
+                      </li>
+                    )}
+                    {user?.role === 'patient' && (
+                      <li>
+                        <Link to="/my-bookings" className="dropdown-item rounded-2">
+                          <i className="fa-solid fa-calendar-check me-2 text-muted"></i>My Bookings
+                        </Link>
+                      </li>
+                    )}
+                    <li><hr className="dropdown-divider my-1" /></li>
+                    <li>
+                      <button onClick={handleLogout} className="dropdown-item rounded-2 text-danger">
+                        <i className="fa-solid fa-right-from-bracket me-2"></i>Logout
+                      </button>
+                    </li>
+                  </ul>
                 </li>
               </>
             ) : (

@@ -1,8 +1,22 @@
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { useSettings } from '../context/SettingsContext';
+import api from '../services/api';
+
+const DOCTOR_PHOTOS = [
+  'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=300&q=80',
+  'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=300&q=80',
+  'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300&q=80',
+  'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=300&q=80',
+];
 
 function About() {
   const { settings } = useSettings();
+  const [doctors, setDoctors] = useState([]);
+
+  useEffect(() => {
+    api.get('/doctors').then(res => setDoctors(res.data.doctors || []));
+  }, []);
 
   const stats = [
     { value: '10+', label: 'Expert Doctors', icon: 'fa-user-doctor' },
@@ -18,13 +32,6 @@ function About() {
     { icon: 'fa-handshake', title: 'Transparency', text: 'Clear communication and honest pricing — no surprises in billing or treatment.' },
     { icon: 'fa-star', title: 'Excellence', text: 'Board-certified specialists committed to delivering the best possible outcomes.' },
     { icon: 'fa-globe', title: 'Accessibility', text: 'Online booking, flexible hours and multilingual staff to serve our community.' },
-  ];
-
-  const team = [
-    { name: 'Dr. Sarah Khoury', role: 'Cardiology', img: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=300&q=80' },
-    { name: 'Dr. Ahmad Hassan', role: 'Dermatology', img: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=300&q=80' },
-    { name: 'Dr. Layla Mansour', role: 'Pediatrics', img: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300&q=80' },
-    { name: 'Dr. Karim Saleh', role: 'General Medicine', img: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=300&q=80' },
   ];
 
   return (
@@ -136,26 +143,31 @@ function About() {
           ))}
         </div>
 
-        {/* Team */}
+        {/* Team from DB */}
         <div className="text-center mb-5">
           <p className="fw-semibold text-uppercase mb-2" style={{ color: '#AB1509', letterSpacing: 2, fontSize: '0.8rem' }}>Meet the Team</p>
           <h2 className="fw-bold mb-2" style={{ fontSize: '2rem' }}>Our Specialists</h2>
           <p className="text-muted">Experienced doctors dedicated to your care</p>
         </div>
         <div className="row g-4 mb-5">
-          {team.map(t => (
-            <div className="col-6 col-md-3" key={t.name}>
-              <div className="text-center">
-                <img src={t.img} alt={t.name}
-                  className="rounded-circle mb-3"
-                  style={{ width: 110, height: 110, objectFit: 'cover', border: '4px solid #fff7d3', boxShadow: '0 4px 12px rgba(171,21,9,0.2)' }}
-                  onError={e => { e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=AB1509&color=fff7d3&size=110`; }}
-                />
-                <h6 className="fw-bold mb-0">{t.name}</h6>
-                <small style={{ color: '#AB1509', fontWeight: 600 }}>{t.role}</small>
+          {doctors.map((doc, index) => {
+            const photoSrc = doc.photo_url
+              ? (doc.photo_url.startsWith('/uploads') ? `http://localhost:5000${doc.photo_url}` : doc.photo_url)
+              : DOCTOR_PHOTOS[index % DOCTOR_PHOTOS.length];
+            return (
+              <div className="col-6 col-md-3" key={doc.id}>
+                <div className="text-center">
+                  <img src={photoSrc} alt={doc.name}
+                    className="rounded-circle mb-3"
+                    style={{ width: 110, height: 110, objectFit: 'cover', border: '4px solid #fff7d3', boxShadow: '0 4px 12px rgba(171,21,9,0.2)' }}
+                    onError={e => { e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(doc.name)}&background=AB1509&color=fff7d3&size=110`; }}
+                  />
+                  <h6 className="fw-bold mb-0">{doc.name}</h6>
+                  <small style={{ color: '#AB1509', fontWeight: 600 }}>{doc.specialization}</small>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* CTA */}
