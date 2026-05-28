@@ -27,6 +27,8 @@ import AdminSettings from './pages/admin/AdminSettings';
 import AdminAnalytics from './pages/admin/AdminAnalytics';
 import AdminMessages from './pages/admin/AdminMessages';
 import SendNotification from './pages/admin/SendNotification';
+import AdminCreateBooking from './pages/admin/AdminCreateBooking';
+import AdminExport from './pages/admin/AdminExport';
 // Doctor panel
 import DoctorAppointments from './pages/admin/DoctorAppointments';
 import DoctorProfile from './pages/admin/DoctorProfile';
@@ -85,6 +87,8 @@ function App() {
         <Route path="analytics" element={<AdminAnalytics />} />
         <Route path="messages" element={<AdminMessages />} />
         <Route path="send-notification" element={<SendNotification />} />
+        <Route path="export" element={<AdminExport />} />
+
         {/* Doctor routes */}
         <Route path="my-appointments" element={<DoctorAppointments />} />
         <Route path="my-profile" element={<DoctorProfile />} />

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../../services/api';
-
+import AdminCreateBooking from './AdminCreateBooking';
 const statusClass = { pending: 'badge-pending', confirmed: 'badge-confirmed', cancelled: 'badge-cancelled', completed: 'badge-completed' };
 
 export default function AdminBookings() {
@@ -14,7 +14,7 @@ export default function AdminBookings() {
   const [reassignForm, setReassignForm] = useState({ doctor_id: '', booking_date: '', start_time: '' });
   const [slots, setSlots] = useState([]);
   const [saving, setSaving] = useState(false);
-
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const fetchBookings = () => {
     const params = new URLSearchParams();
     if (search) params.append('search', search);
@@ -79,6 +79,9 @@ export default function AdminBookings() {
             <h1 className="admin-page-title">Bookings</h1>
             <p className="admin-page-subtitle">Manage all appointments</p>
           </div>
+                <button className="btn-admin-primary" onClick={() => setShowCreateModal(true)}>
+         <i className="fa-solid fa-calendar-plus me-2"></i>New Booking
+      </button>
           <input className="form-control" style={{ maxWidth: 280 }} placeholder="🔍 Search patient, email..."
             value={search} onChange={e => setSearch(e.target.value)} />
         </div>
@@ -297,6 +300,12 @@ export default function AdminBookings() {
           </div>
         </div>
       )}
+      {showCreateModal && (
+  <AdminCreateBooking
+    onClose={() => setShowCreateModal(false)}
+    onSuccess={() => fetchBookings()}
+  />
+)}
     </div>
   );
 }

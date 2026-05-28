@@ -13,6 +13,7 @@ const adminNav = [
   { to: '/admin/send-notification', label: 'Send Message', icon: 'fa-paper-plane' },
   { to: '/admin/analytics', label: 'Analytics', icon: 'fa-chart-line' },
   { to: '/admin/settings', label: 'Settings', icon: 'fa-gear' },
+  { to: '/admin/export', label: 'Export', icon: 'fa-file-excel' },
 ];
 
 const doctorNav = [
